@@ -1,0 +1,404 @@
+// AHP
+
+
+
+struct Alternativas{
+    char nombre[30];
+    float matriz[50][50];
+    float v_propio[50][1];
+    float m_normalizada[50][50];
+    float suma_columna_alternativa[50];
+    float suma_fila_alternativa[50];
+};
+
+void AHP();
+
+void AHP(){
+
+    float criterio[50][50];
+    float matriz_final[50][50];
+    int c_alternativa,c_criterios;
+    cout<<"Ingrese cantidad de criterios : ";cin>>c_criterios;
+    cout<<"Ingrese numero de alternativas : ";cin>>c_alternativa;
+    Alternativas alternativa[50];
+
+	for (int i=0; i<=c_criterios; i++){
+            for (int j=0; j<=c_criterios; j++){
+                criterio[i][i]=1;
+                }
+    }
+    system("cls");
+    cout<<"De acuerdo a los siguientes pesos de criterios : \n";
+    cout<<"IGUAL    MODERADO    FUERTE  MUY FUERTE  EXTREMO\n";
+    cout<<"------------------------------------------------\n";
+    cout<<"  1          3           5       7           9  \n";
+	cout<<"\nCOMPLETE LOS SIGUIENTES DATOS: \n";
+	// Completando datos en la matriz de criterios
+
+	for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+            	//cout<<criterio[i][j]<<" ";
+                if (i!=j){
+                	if( i <= (c_criterios+1)/2 && j>i){
+                    	cout<<"ingrese el valor de ["<<i<<"]["<<j<<"]: "; 
+                    	cin>>criterio[i][j];
+                		criterio[j][i]= (1/criterio[i][j]);
+                	}
+                }
+            }
+        }
+	
+    // Imprimiendo matriz de criterios
+
+    cout<<endl<<"Su matriz es la siguiente : \n";
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+            	cout<<criterio[i][j]<<"            ";
+        }
+        cout<<"\n";
+    }
+
+    cout<<endl<<endl;
+
+    // Suma de columna de cada matriz  
+
+    float suma_columna[c_criterios];
+
+    for (int i=0; i<c_criterios; i++){
+        suma_columna[i] = 0;
+
+    }
+
+    float Matriz_normalizada[c_criterios][c_criterios];
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                suma_columna[j] = suma_columna[j]+ criterio[i][j];
+            }
+
+    }
+
+    // Normalizando la matriz paso 3
+
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                Matriz_normalizada[i][j] = criterio[i][j] / suma_columna[j];
+            }
+
+    }
+    // Mostrando la matriz normalizada
+    cout<<endl<<"Matriz normalizada: \n\n";
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                cout<<Matriz_normalizada[i][j]<<"    ";
+            }
+            cout<<endl;
+
+    }
+	
+
+    //Sumando fila
+    float suma_fila[c_criterios];
+    for (int i=0; i<c_criterios; i++){
+        suma_fila[i] = 0;
+    }
+
+    float vector_propio[c_criterios][1];
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                suma_fila[i] = suma_fila[i]+ Matriz_normalizada[i][j];
+            }
+    }
+
+    //Hallando vector propio
+
+    for (int i=0; i<c_criterios; i++){
+        vector_propio[i][0] = suma_fila[i]/c_criterios;
+    }
+
+    cout<<endl<<"Vector Propio de criterios: \n\n";
+    //Imprimiendo vector propio
+    for (int i=0; i<c_criterios; i++){
+        cout<<vector_propio[i][0]<<"  ";
+
+    }
+    
+
+    //CONSISTENCIA DE UNA MATRIZ
+    cout<<"\n\n----------------------------------\n";
+    cout<<"Consistencia de los criterios \n";
+    cout<<"----------------------------------\n";
+
+    float c[c_criterios][1];    
+
+    for (int i=0; i<c_criterios; i++){
+        for (int j=0; j<1 ; j++){
+            c[i][j] = 0;
+        }
+    }
+
+
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<1 ; j++){
+                for (int z=0; z < c_criterios ; z++ ){
+                    c[i][j] += Matriz_normalizada[i][z] * vector_propio[z][j]; 
+                }
+            }
+    }
+
+    // Mostrando la matriz normalizada
+    cout<<endl<<"Matriz A: \n\n";
+    for (int i=0; i<c_criterios; i++){
+        cout<<c[i][0]<<"   ";
+    }
+
+    // Consistencia
+    float consistencia[c_criterios],promedio = 0,promedio_f;
+
+    for (int i=0;i<c_criterios;i++){
+        consistencia[i]=0;
+    }
+
+    for (int i=0;i<c_criterios;i++){
+        consistencia[i]= consistencia[i]+(c[i][0]/vector_propio[i][0]);
+        promedio = promedio + consistencia[i];
+    }
+
+    promedio_f=promedio/c_criterios;
+    
+    float IC,IA,RC;
+    IC = (promedio_f - c_criterios)/(c_criterios-1);
+    IA = (1.98 * (c_criterios-2))/c_criterios;
+
+    cout<<endl<<endl;
+    cout<<"RAZON DE CONSISTENCIA : "<<  IC <<endl;
+    cout<<"INDICE DE CONSISTENCIA : "<< IA <<endl;
+    cout<<"INDICE DE ALEATORIEDAD : "<< IC/IA <<endl;
+
+
+
+    //===================================== ALTERNATIVAS =================================
+    //===================================== ALTERNATIVAS =================================
+    //===================================== ALTERNATIVAS =================================
+    //===================================== ALTERNATIVAS =================================
+
+
+
+    for(int z=0; z<c_alternativa;z++){
+        for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                alternativa[z].matriz[i][i] = 1 ;
+            }
+
+        }
+    }
+
+    for (int z=0; z<c_alternativa;z++){
+        cout<<"\nMATRIZ DE ALTERNATIVA "<<z+1<<" : \n";
+        for (int i=0; i<c_criterios; i++){
+                for (int j=0; j<c_criterios; j++){
+                    //cout<<criterio[i][j]<<" ";
+                    if (i!=j){
+                        if( i <= (c_criterios+1)/2 && j>i){
+                            cout<<"ingrese el valor de ["<<i<<"]["<<j<<"]: "; 
+                            cin>>alternativa[z].matriz[i][j];
+                            alternativa[z].matriz[j][i]= (1/alternativa[z].matriz[i][j]);
+                        }
+                    }
+                }
+            }
+        
+    }
+    
+    // ///////////////////////////////////////////////////////////////////////////////////
+
+
+
+    float suma_columna_alternativa[c_criterios];
+    // igualando a 0 para los valores basura
+
+    for (int z=0; z<c_alternativa;z++){
+        for (int i=0; i<c_criterios; i++){
+            alternativa[z].suma_columna_alternativa[i] = 0;
+
+        }
+    }
+
+    //Suma columna
+
+    for(int z=0; z<c_alternativa;z++){
+        for (int i=0; i<c_criterios; i++){
+                for (int j=0; j<c_criterios; j++){
+                    alternativa[z].suma_columna_alternativa[j] = alternativa[z].suma_columna_alternativa[j] + alternativa[z].matriz[i][j];
+                }
+        }
+    }
+
+
+    // Normalizando la matriz paso 3
+
+    for(int z=0; z<c_alternativa;z++){ 
+        for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                alternativa[z].m_normalizada[i][j] = alternativa[z].matriz[i][j] / alternativa[z].suma_columna_alternativa[j];
+            }
+        }
+    }
+
+    for (int z=0; z<c_alternativa;z++){
+        for (int i=0; i<c_criterios; i++){
+            alternativa[z].suma_fila_alternativa[i] = 0;
+
+        }
+    }
+
+    for(int z=0; z<c_alternativa;z++){ 
+        for (int i=0; i<c_criterios; i++){
+                for (int j=0; j<c_criterios; j++){
+                    alternativa[z].suma_fila_alternativa[i] = alternativa[z].suma_fila_alternativa[i]+ alternativa[z].m_normalizada[i][j];
+                }
+        }
+    }
+
+    for(int z=0; z<c_alternativa;z++){ 
+        for (int i=0; i<c_criterios; i++){
+            alternativa[z].v_propio[i][0] = alternativa[z].suma_fila_alternativa[i]/c_criterios;
+        }
+    }
+
+    for(int z=0; z<c_alternativa;z++){ 
+        cout<<"\nVector Propio "<<z+1<<" : \n";
+        for (int i=0; i<c_criterios; i++){
+            cout<<alternativa[z].v_propio[i][0] <<" ";
+        }
+        cout<<endl<<endl;
+    }
+
+    //matriz final
+
+    for (int i=0; i<c_alternativa; i++){
+            for (int j=0; j<c_alternativa; j++){
+                matriz_final[i][j] = 0;   
+            }
+    }
+
+
+    for(int i=0; i<c_alternativa;i++){ 
+        for (int j=0; j<c_criterios; j++){
+            matriz_final[j][i] = alternativa[i].v_propio[j][0];        
+        }
+    }
+
+    cout<<endl<<endl;
+    cout<< "\nMATRIZ DE VECTORES / ALTERNATIVAS : \n";
+    for (int i=0; i<c_alternativa; i++){
+        for (int j=0; j<c_criterios; j++){
+            cout<<matriz_final[i][j]<<" " ;
+        }
+        cout<<endl;
+    }
+    cout<<endl<<endl;
+    
+    float cc[c_criterios][1];    
+
+    for (int i=0; i<c_criterios; i++){
+        for (int j=0; j<1 ; j++){
+            cc[i][j] = 0;
+        }
+    }
+
+    for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<1 ; j++){
+                for (int z=0; z < c_criterios ; z++ ){
+                    cc[i][j] += matriz_final[i][z] * vector_propio[z][j]; 
+                }
+            }
+    }
+
+
+    float mayor ,bandera ;
+
+    for (int i=0; i<c_criterios ; i++){
+        mayor = cc[i][0];
+        if(cc[i][0]> cc[i+1][0]){
+            mayor = cc[i][0];
+            bandera = i;
+        }
+    }
+    cout<<"\nLa Alternativa "<< bandera +1 << " es la mejor con "<<mayor*100<<"% "<<"de importancia \n";
+
+}
+
+
+
+
+
+/*      IMPRIMIR STRUCTURA CON MATRIZ
+
+
+for(int z=0; z<c_alternativa;z++){
+        for (int i=0; i<c_criterios; i++){
+            for (int j=0; j<c_criterios; j++){
+                cout<<alternativa[z].matriz[i][i]<<" " ;
+            }
+            cout<<endl;
+        }
+        cout<<endl<<endl;
+    }
+
+
+
+*/
+
+
+
+// 5 5 7 1 3 3
+
+
+
+/*
+  for (int i=0; i<=c_criterios; i++){
+            for (int j=0; j<=c_criterios; j++){
+                criterio[i][j]=0;
+                }
+    }
+    
+
+    for (int i=0; i<=c_criterios; i++){
+            for (int j=0; j<=c_criterios; j++){
+                criterio [i][i] = 1;  
+                if (criterio[i][j]==criterio[j][i]){
+                    cout<<"criterio "<<i<<""
+                }
+            }
+    }
+
+*/
+
+
+
+/* OTRA FORMA
+    int c_candidatos,c_criterios;
+    cout<<"Ingrese numero de criterios : ";cin>>c_criterios;
+
+    float criterio[50][50];
+    system("cls");
+    cout<<"De acuerdo a los siguientes pesos de criterios : \n";
+    cout<<"IGUAL    MODERADO    FUERTE  MUY FUERTE  EXTREMO\n";
+    cout<<"------------------------------------------------\n";
+    cout<<"  1          3           5       7           9  \n";
+
+
+
+  cout<<"\n llene la siguiente matriz: \n";
+     for (int i=0; i<=c_criterios; i++){
+        float a=0,b=0,dividir;
+            for (int j=0; j<=c_criterios; j++){
+                    cout<<"Ingrese valor["<<i<<"]["<<j<<"]: ";cin>>a;cin>>b;
+                    dividir=a/b;
+                    criterio[i][j]=dividir;
+                }
+                cout<<endl;
+    }
+    
+
+*/
