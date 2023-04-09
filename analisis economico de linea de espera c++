@@ -1,0 +1,91 @@
+/*
+#include <iostream>
+#include <math.h>
+*/
+using namespace std;
+
+
+void analisiseconomico();
+
+/*
+int main()
+
+{
+	analisiseconomico();			
+	return 0;
+}
+*/
+void analisiseconomico()
+
+{
+			
+
+				double lam, ts, cw, cs, k;
+				double lq,lqr,pu,total;
+				int q=1;
+				double po,suma;
+				double factorial =1;
+				int i = 1;
+				
+				while (q=1)
+				{
+								system("cls");
+            	cout<<"ANALISIS ECONOMICO DE LINEAS DE ESPERA"<<endl;
+  	 			cout<<"**************************************"<<endl;
+                cout<<"INGRESE DATOS: "<<endl<<endl;
+                cout<<"Tasa de llegada de cada unidad (Lahma)........:  ";
+                cin>>lam;
+                cout<<"Tasa de servicio (u)........: ";
+                cin>>ts;
+                cout<<"Costo de tiempo de espera (Cw)........:  ";
+                cin>>cw;
+                cout<<"Costo de tiempo de servicio (Cs)........:  ";
+                cin>>cs;
+                cout<<"Cantidad de canales (k)........:  ";
+                cin>>k;
+                if (k==1)
+                {
+              		lq=pow(lam,2);
+					lqr=lq/(ts*(ts-lam));
+					pu=lqr+(lam/ts);
+					total=(cw*pu)+(cs*k);
+				}
+				
+				else
+				
+				{
+					for (int j=1;j<=i; j++)
+							factorial=factorial*j;
+
+				suma = suma + pow(lam/ts,i)/factorial;
+					i++;
+				
+					for	(int i=1; i<=k; i++)
+						factorial = factorial*i;
+				
+				po=1/(suma+(pow(lam/ts,k)/factorial)*(k*ts/(k*ts-lam)));
+				
+					factorial=1;
+					for (int i=1; i<=k;i++)
+						factorial =factorial * i;
+					
+				lqr=((pow(lam/ts,k)*lam*ts)/(factorial*pow(k*ts-lam,2)))*po;
+					
+				pu= lqr+(lam/ts);
+				total = (cw*pu)+(cs*k);
+				
+				}
+
+  	 			cout<<"\n\nRESULTADOS: "<<endl;
+  	 			cout<<"**********"<<endl;
+                cout<<"Promedio de unidades en lista de espera......: "<<lqr<<endl;
+                cout<<"Promedio de unidades en el sistema...: "<<pu<<endl;
+                cout<<"Costo Total................: "<<total<<endl;
+                cout<<endl;
+                system("pause");
+                
+                }
+}
+
+
+
