@@ -1,0 +1,185 @@
+
+typedef class Activity
+{
+    public:
+
+    char Id[5];
+    float duracion;
+    int Est;
+    int Lst;
+    int Eet;
+    int Let;
+    struct Activity *Sucesores[100];
+    struct Activity *Predecesores[100];
+}actividades;
+
+int na,critico;
+actividades *List[100],*check,*check2, *actividad;
+
+void ObtenerActividades();
+void RecorridoAdelante();
+void RecorridoAtras();
+void RutaCritica();
+
+int VerificarActividad(char id[5], int i)
+{
+    for(int j = 0; j < i; j++)
+    {
+        if(strcmp(List[j]->Id,id) == 0)
+            check=List[j];
+   }
+   return NULL;
+}
+
+int ObtenerIndice(actividades *aux, int i)
+{
+	for(int j = 0; j < i; j++)
+    {
+        if(aux->Id==List[j]->Id)
+      	    return j;
+    }
+   return 0;
+}
+
+int EstablecerSucesores(actividades *actividad)
+{
+   int k=0;
+   while (actividad->Sucesores[k]!= NULL){
+      k++;
+   }
+   return k;
+}
+
+
+void ObtenerActividades()
+{
+    do {
+
+        cout<<"\n Introduzca el numero de actividades: ";
+        cin>>na;
+        if(na < 2 )
+            cout<<"\n El numero de actividades debe ser mayor o igual a 2 \n\n";
+    } while(na < 2);
+
+   for(int i = 0; i < na; i++)
+   {
+
+	   int tduracion;
+
+	   actividad = new (class Activity);
+       actividad->Predecesores[0]=NULL;
+       actividad->Sucesores[0]=NULL;
+       cout<<"\n\tACTIVIDAD "<<(i+1)<<"\n";
+       cout<<"\tID\t: ";
+       cin>>actividad->Id;
+       cout<<"\tDuracion: ";
+       cin>>tduracion;
+       actividad->duracion = tduracion;
+       int np;
+       cout<<"\tNumero de Predecesores : ";
+       cin>>np;
+       List[i] = actividad;
+       if(np != 0) {
+           char id[5];
+           for(int j = 0; j < np; j++)
+           {
+               cout<<"\t#"<<(j+1)<<" ID de Predecesor\t: ";
+               cin>>id;
+               actividad->Predecesores[j] = new (class Activity);
+               actividades *aux;
+               aux =new (class Activity);
+               int resultados;
+               VerificarActividad(id, i);
+               if(check != NULL) {
+                   actividad->Predecesores[j] = check;
+                   resultados = ObtenerIndice(check, i);
+                   int k = EstablecerSucesores(List[resultados]);
+                   List[resultados]->Sucesores[k] = actividad;
+                } else {
+                    cout<<"\n Hubo algun error, verifica y vuelve intentalo. \n\n";
+                    j--;
+                }
+            }
+       } else {
+           actividad->Predecesores[0]=NULL;
+       }
+
+    }
+}
+
+void RecorridoAdelante()
+{
+    for(int i = 0; i < na; i++)
+    {
+        if(List[i]->Predecesores[0]==NULL) {
+            List[i]->Est=0;
+            List[i]->Eet=List[i]->duracion;
+        } else {
+            int k=0;
+            List[i]->Est=0;
+            while (List[i]->Predecesores[k]!=NULL) {
+                if(List[i]->Est < List[i]->Predecesores[k]->Eet)
+                    List[i]->Est = List[i]->Predecesores[k]->Eet;
+                //cout<<List[i]->Est<<" "<<List[i]->Predecesores[k]->Eet<<endl;
+                k++;
+            }
+            List[i]->Eet = List[i]->Est + List[i]->duracion;
+        }
+    }
+}
+
+void RecorridoAtras()
+{
+    int i;
+    int max=List[0]->Eet;
+    for(i=1;i<na;i++)
+    {
+        if(List[i]->Eet>max)
+            max=List[i]->Eet;
+    }
+    critico=max;
+    int k=na-1;
+    for(int i=k; i>=0; i--)
+    {
+        if(List[i]->Sucesores[0]!=NULL) {
+            int k=0;
+            List[i]->Let=List[i]->Sucesores[0]->Lst;
+            while (List[i]->Sucesores[k]!=NULL) {
+                if(List[i]->Let > List[i]->Sucesores[k]->Lst)
+                    List[i]->Let = List[i]->Sucesores[k]->Lst;
+                k++;
+            }
+            List[i]->Lst = List[i]->Let-List[i]->duracion;
+        } else {
+                List[i]->Let=max;
+         List[i]->Lst=max-List[i]->duracion;
+      }
+   }
+}
+
+void RutaCritica()
+{
+
+    for(int i=0; i<na;i++)
+
+    {
+        cout<<"\n\n\tNodo "<<i<<" = "<<List[i]->Id;
+        cout<<"\n\tDuracion = "<<List[i]->duracion<< " Semanas";
+        cout<<"\n\tES = "<<List[i]->Est;
+        cout<<"\n\tEF = "<<List[i]->Eet;
+        cout<<"\n\tLS = "<<List[i]->Lst;
+        cout<<"\n\tLF = "<<List[i]->Let;
+        cout<<"\n\tHol = "<<(List[i]->Let)-(List[i]->Eet);
+    }
+    cout<<"\n\n\tActividades de ruta Critica: "<<endl;
+    cout<<endl;
+
+    for(int i=0;i<na;i++)
+    {
+        if((List[i]->Eet - List[i]->Let) == 0 && (List[i]->Est - List[i]->Lst)== 0)
+            cout<<" - "<<List[i]->Id;
+    }
+    cout<<"\n\n\tDuracion Total: "<<critico << " Semanas";
+    cout<<endl;
+    cout<<endl;
+}
