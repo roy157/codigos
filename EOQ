@@ -1,0 +1,176 @@
+#include "librerias.h"
+#include "cpm.h"
+#include "ahp1.h"
+#include "per.h"
+
+using namespace std;
+
+void eoq();
+
+int main(){
+	int opc;
+	do{
+   		system("cls");
+		cout<<"M E N U - O P E R A C I O N E S"<<endl;
+		cout<<"*******************************"<<endl;
+   		cout<<"1. CPM..."<<endl;
+   		cout<<"2. PERT..."<<endl;
+   		cout<<"3. INVENTARIO EOQ..."<<endl;
+        cout<<"4. AHP..."<<endl;
+   		cout<<"5. Arbol de desicion"<<endl;
+        cout<<"6. Salir"<<endl;
+   		cout<<"OPCION :  "<<endl;
+   		cin>>opc;
+   		switch(opc){
+   			case 1:
+         		system("cls");
+                List[0] = NULL;
+				ObtenerActividades();
+                RecorridoAdelante();
+                RecorridoAtras();
+                RutaCritica();
+				system("pause");
+			break;
+
+			case 2:
+         		system("cls");
+				List2[0] = NULL;
+                ObtenerActividades2();
+                RecorridoAdelante2();
+                RecorridoAtras2();
+                RutaCritica2();
+				system("pause");
+			break;
+
+      		case 3: 
+				system("cls");
+				eoq();
+				system("pause");
+        	break;
+
+            case 4: 
+				system("cls");
+				AHP();
+				system("pause");
+        	break;
+
+            case 5: 
+				system("cls");
+				eoq();
+				system("pause");
+        	break;
+   		}
+   	}while(opc!=6);
+}
+
+void eoq(){
+	int op;
+	do{
+		system("cls");
+      	cout<<"I N V E N T A R I O - E O Q"<<endl;
+  	 	cout<<"***************************"<<endl;
+   		cout<<"1. NO REORDER POINT"<<endl;
+   		cout<<"2. COMPUTE REORDER POINT"<<endl;
+   		cout<<"3. REGRESAR"<<endl;
+   		cout<<"OPCION :  "<<endl;
+   		cin>>op;
+        switch(op){
+            case 1:
+            	system("cls");
+            	float da, sa, ha, uca;
+            	float qa,lmaxa, aia, oppa,asca, ahca, tia, pda, totala;
+            	cout<<"NO REORDER POINT"<<endl;
+  	 			cout<<"****************"<<endl;
+                cout<<"INGRESE DATOS: "<<endl<<endl;
+                cout<<"Demand rate (D)................: ";
+                cin>>da;
+                cout<<"Setup/ordering cost (S)........: ";
+                cin>>sa;
+                cout<<"Holding/carrying cost (H)......: ";
+                cin>>ha;
+                cout<<"Unit cost......................: ";
+                cin>>uca;
+                cout<<endl<<endl;
+                qa=sqrt((2*da*sa)/ha);
+                lmaxa=qa;
+                aia=qa/2;
+                oppa=da/qa;
+                asca=oppa*sa;
+                ahca=aia*ha;
+                tia=asca+ahca;
+                pda=da*uca;
+                totala=tia+pda;
+  	 			cout<<"RESULTADOS: "<<endl<<endl;
+                cout<<"Optimal order quantity (Q*)......: "<<qa<<endl;
+                cout<<"Maximum inventory level (lmax)...: "<<lmaxa<<endl;
+                cout<<"Average Inventory................: "<<aia<<endl;
+                cout<<"Orders per period (year).........: "<<oppa<<endl;
+                cout<<"Annual setup cost................: "<<asca<<endl;
+                cout<<"Annual holding cost..............: "<<ahca<<endl;
+                cout<<"Total inventory (hld + stp) cost.: "<<tia<<endl;
+                cout<<"Unit cost (PD)...................: "<<pda<<endl;
+                cout<<"Total Cost (including units).....: "<<totala<<endl;
+                cout<<endl;
+                system("pause");
+            break;
+        	case 2:
+            	system("cls");
+            	float db, sb, hb,ucb , dppb, ddrb, ltb, ssb;
+                float qb,lmaxb, aib, oppb,ascb, ahcb, tib, pdb, totalb, reorder;
+            	cout<<"NO REORDER POINT"<<endl;
+  	 			cout<<"****************"<<endl;
+                cout<<"INGRESE DATOS: "<<endl<<endl;
+                cout<<"Demand rate (D)................: ";
+                cin>>db;
+                cout<<"Setup/ordering cost (S)........: ";
+                cin>>sb;
+                cout<<"Holding/carrying cost (H)......: ";
+                cin>>hb;
+                cout<<"Unit cost......................: ";
+                cin>>ucb;
+                cout<<"Days per year or ..............: ";
+                cin>>dppb;
+                cout<<"...Daily demand rate...........: ";
+                cin>>ddrb;
+                cout<<"Lead time (in days)............: ";
+                cin>>ltb;
+                cout<<"Safety stock...................: ";
+                cin>>ssb;
+                cout<<endl;
+                if(dppb==0&&ddrb>0){
+                	dppb=db/ddrb;
+                	cout<<"Days per year or ..............: "<<dppb<<endl;
+				}
+				if(ddrb==0&&dppb>0){
+                	ddrb=db/dppb;
+                	cout<<"...Daily demand rate...........: "<<ddrb<<endl;
+				}
+				cout<<endl;
+                qb=sqrt((2*db*sb)/hb);
+                lmaxb=qb;
+                aib=qb/2;
+                oppb=db/qb;
+                ascb=oppb*sb;
+                ahcb=aib*hb;
+                tib=ascb+ahcb;
+                pdb=db*ucb;
+                totalb=tib+pdb;
+                reorder=db/dppb*ltb;
+  	 			cout<<"RESULTADOS: "<<endl<<endl;
+                cout<<"Optimal order quantity (Q*)......: "<<qb<<endl;
+                cout<<"Maximum inventory level (lmax)...: "<<lmaxb<<endl;
+                cout<<"Average Inventory................: "<<aib<<endl;
+                cout<<"Orders per period (year).........: "<<oppb<<endl;
+                cout<<"Annual setup cost................: "<<ascb<<endl;
+                cout<<"Annual holding cost..............: "<<ahcb<<endl;
+                cout<<"Total inventory (hld + stp) cost.: "<<tib<<endl;
+                cout<<"Unit cost (PD)...................: "<<pdb<<endl;
+                cout<<"Total Cost (including units).....: "<<totalb<<endl;
+                cout<<endl;
+                cout<<"Reorder point....................: "<<reorder<<endl;
+                cout<<endl;
+                system("pause");
+            break;
+        }
+    }while(op!=3);
+}
