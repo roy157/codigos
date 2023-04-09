@@ -1,0 +1,73 @@
+/*
+M/G/1
+MODELO DE LÃNEA DE ESPERA DE UN SOLO CANAL, CON LLEGADAS POISSON Y
+TIEMPOS DE SERVICIO ARBITRARIOS M/G/1
+*/
+
+void P0(float val,float Po,float lambda,float u)
+{
+    val=lambda/u;
+    if(val<1){
+        Po=(1-(lambda/u))*100;
+        cout<<"la probabilidad que no haya unidades en el sistema:"<<Po<<"%"<<endl;
+    }else{
+        cout<<"no cumple la condicion"<<endl;
+    }
+}
+
+void lq(float Lq,float lambda,float u,float desv)
+{
+    Lq=((lambda*lambda)*(desv*desv)+(lambda/u)*(lambda/u))/(2*(1-(lambda/u)));
+    cout<<"El numero promedio de unidades en la linea de espera es :"<<Lq<<endl;
+}
+
+void l(float L,float Lq,float lambda,float u,float desv)
+{
+    Lq=((lambda*lambda)*(desv*desv)+(lambda/u)*(lambda/u))/(2*(1-(lambda/u)));
+    L=Lq+(lambda/u);
+    cout<<"Numero promedio de unidades en el sistema :"<<L<<endl;
+}
+
+void wq(float Wq,float Lq,float lambda,float u,float desv)
+{
+    Lq=((lambda*lambda)*(desv*desv)+(lambda/u)*(lambda/u))/(2*(1-(lambda/u)));
+    Wq=Lq/lambda;
+    cout<<"Tiempo promedio que una unidad pasa en la linea de espera:"<<Wq<<endl;
+}
+
+void w(float W,float Wq,float Lq,float lambda,float u,float desv)
+{
+    Lq=((lambda*lambda)*(desv*desv)+(lambda/u)*(lambda/u))/(2*(1-(lambda/u)));
+    Wq=Lq/lambda;
+    W=Wq+(1/u);
+    cout<<"Tiempo promedio que una unidad pasa en el sistema :"<<W<<endl;
+}
+
+void pw(float Pw,float lambda,float u)
+{
+    Pw=(lambda/u)*100;
+    cout<<"probabilidad de una unidad que llega deba esperar que la atiendan:"<<Pw<<"%"<<endl;
+}
+
+/*
+int main()
+{
+    double lambda,u,desv,Po,Lq,L,Wq,W,Pw,val;
+    cout<<"Ingrese la tasa de llegadas :";
+    cin>>lambda;
+    cout<<"Ingrese la tasa de servicios :";
+    cin>>u;
+    cout<<"Ingrese la desviacion estandar (tiempo de servicio) :";
+    cin>>desv;
+
+    P0(val,Po,lambda,u);
+    lq(Lq,lambda,u,desv);
+    l(L,Lq,lambda,u,desv);
+    wq(Wq, Lq, lambda, u, desv);
+    w( W, Wq, Lq, lambda, u, desv);
+    pw(Pw, lambda, u);
+    system("pause");
+
+    return 0;
+}
+*/
