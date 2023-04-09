@@ -1,0 +1,410 @@
+#include "inclu.h"
+#include "grupo3.h"
+#include <iostream>
+#include "grupo4.h"
+#include "analisis.h"
+#include "comple.h"
+
+using namespace std;
+
+int main(){
+
+    int opcion = 0;
+    do{
+        system("cls");
+        cout<<"\t-----------------------------------------\n";
+        cout<<"\tMENU DE UNIDAD 2 INVESTIGACION OPERATIVA\n";
+        cout<<"\t-----------------------------------------\n\n";
+        cout<<"\n1. Modelo de linea de espera de multiples canales con llegada poisson y tiempo de servicio exponenciales";
+        cout<<"\n2. Modelo de linea de espera de canal unico con llegada poisson y tiempo de servicio exponencial";
+        cout<<"\n3. Modelo de multiples canales con llegada poison y tiempos de servicio arbitrario y sin linea de espera";
+        cout<<"\n4. Modelo de linea de espera de canal unico con llegada poisson y tiempo de servicio arbitrario ";
+        cout<<"\n5. Analisis economico de linea de espera";
+        cout<<"\n6. Problema de Complementariedad";
+        cout<<"\n7. Salir";
+        cout<<"\nIngrese opcion: ";
+        cin>>opcion;
+        
+        switch(opcion){
+            case 1:
+                { 
+                system("cls");
+                int r,op;
+                do{
+            //CONDICIONES
+                int n; //Cantidad de unidades en el sistema
+                float tmll, //Tasa media de llegada de clientes para el sistema
+                    tms, //Tasa media de servicio de clientes para cada canal
+            //OPERACIONES
+                P0, //Probabilidad de que no haya unidades en el sistema
+                Lq, //Cantidad promedio de unidades en la linea de espera
+                Ls, //Cantidad promedio de unidades en el sistema
+                Wq, //Tiempo promedio que pasa una unidad en la lÃ­nea de espera
+                Ws, //Tiempo promedio que pasa una unidad en el sistema
+                Pw, //Probabilidad que una unidad que llega tenga que esperar por el servicio
+                Pn; //Probabilidad de n unidades en el sistema
+
+                cout<<"\n\tM.L.E DE UN SOLO CANAL CON LLEGADAS DE POISSON"<<endl;
+                cout<<"\t***************************************************"<<endl;
+                cout<<"\t          y TIEMPOS DE SERVICIO EXPONENCIALES"<<endl;
+                cout<<"\t          *******************************"<<endl<<endl<<endl;
+
+
+                cout<<"\tINGRESE DATOS: "<<endl<<endl;
+                cout<<"\tTasa media de llegada de clientes para el sistema (lambda)........: ";
+                cin>>tmll;
+                cout<<"\tTasa media de servicio de clientes para cada canal (miu).........: ";
+                cin>>tms;
+                cout<<endl<<endl;
+
+
+            //CALCULANDO OPERACIONES
+
+            if((tmll/tms < 1) || (tms > tmll) ){
+
+                P0=1-(tmll/tms);
+            //------------------------------------------------------------------------
+
+                Lq=pow(tmll,2)/(tms*(tms-tmll));
+            //-------------------------------------------------------------------------
+
+                Ls=Lq+(tmll/tms);
+            //-------------------------------------------------------------------------
+
+                Wq=Lq/tmll;
+            //-------------------------------------------------------------------------
+
+                Ws=Wq+(1/tms);
+            //-------------------------------------------------------------------------
+
+                Pw=tmll/tms;
+            //-------------------------------------------------------------------------
+
+                system("cls");
+                cout<<endl<<endl;
+
+                cout<<"\t RESULTADOS: "<<endl;
+                cout<<"\t **********"<<endl<<endl;
+                cout<<"\tProbabilidad de que no haya unidades en el sistema (P0): "<<P0<<endl;
+                cout<<"\tCantidad promedio de unidades en la linea de esperal (Lq): "<<Lq<<endl;
+                cout<<"\tCantidad promedio de unidades en el sistema (Ls): "<<Ls<<endl;
+                cout<<"\tTiempo promedio que pasa una unidad en la lÃ­nea de espera (Wq): "<<Wq<<endl;
+                cout<<"\tTiempo promedio que pasa una unidad en el sistema (Ws): "<<Ws<<endl;
+                cout<<"\tProbabilidad que una unidad que llega tenga que esperar por el servicio (Pw): "<<Pw<<endl<<endl;
+
+                cout<<"\tPara calcular la Probabilidad de n unidades en el sistema (Pn) "<<endl;
+
+                do{
+                    cout<<"\tIngrese la cantidad de unidades (n): "; cin>>n;
+
+                    Pn=pow(tmll/tms,n)*P0;
+
+                    cout<<"\tLa probabilidad de "<<n<<" unidades en el sistema es de: "<<Pn<<endl<<endl;
+
+                    cout<<"\n\n\tDesea volver a calcular la probabilidad para otra cantidad de unidades (n)? SI (1) o NO (2): "; cin>>op;
+                }while(op==1);
+            }
+
+                else {
+                        cout <<" Linea de esperada descontrolada, no se tiene suficiente capacidad en el sistema" <<endl;
+                }
+
+                cout<<endl;
+                system("pause");
+                system("cls");
+                cout<<"\n\n\tDesea volver a realizar otro calculo? SI (1) o NO (2): "; cin>>r;
+                cout<<endl;
+
+            }while(r==1);
+                }
+
+            break;
+
+            case 2:
+            {
+                system("cls");
+                    int r,op;
+                do{
+            //CONDICIONES
+                int k; //Cantidad de canales
+                int factorial;
+                int sum = 0;
+                int n; //Cantidad de unidades en el sistema
+                float tmll, //Tasa media de llegada de clientes para el sistema
+                    tms, //Tasa media de servicio de clientes para cada canal
+            //OPERACIONES
+                P0, //Probabilidad de que no haya unidades en el sistema
+                Lq, //Cantidad promedio de unidades en la linea de espera
+                Ls, //Cantidad promedio de unidades en el sistema
+                Wq, //Tiempo promedio que pasa una unidad en la lï¿½nea de espera
+                Ws, //Tiempo promedio que pasa una unidad en el sistema
+                Pw, //Probabilidad que una unidad que llega tenga que esperar por el servicio
+                Pn; //Probabilidad de n unidades en el sistema
+
+                cout<<"\n\tM.L.E CON CANALES Mï¿½LTIPLES CON LLEGADAS DE POISSON"<<endl;
+                cout<<"\t***************************************************"<<endl;
+                cout<<"\t          y TIEMPOS DE SERVICIO EXPONENCIAL"<<endl;
+                cout<<"\t          *******************************"<<endl<<endl<<endl;
+
+
+                cout<<"\tINGRESE DATOS: "<<endl<<endl;
+                cout<<"\tTasa media de llegada de clientes para el sistema (lambda)........: ";
+                cin>>tmll;
+                cout<<"\tTasa media de servicio de clientes para cada canal (miu).........: ";
+                cin>>tms;
+                cout<<"\tCantidad de canales (k)................: ";
+                cin>>k;
+                cout<<endl<<endl;
+
+
+            //CALCULANDO OPERACIONES
+                    int i=0;  // i=n;
+                    while (i<(k-1)){
+                    if(i==0){
+                    factorial=1;
+                    }
+                    else{
+                    factorial=1;
+                    for (int j=1; j<=i; j++){
+                    factorial = factorial*j;
+                    }
+                    }
+                    sum = sum + pow(tmll/tms,i)/factorial;
+                    i++;
+                }
+
+                factorial=1;
+                for (int i=1; i<=k; i++){
+                    factorial = factorial*i;
+                }
+                P0=1/(sum+(pow(tmll/tms,k)/factorial)*(k*tms/(k*tms-tmll)));
+
+            //------------------------------------------------------------------------
+                factorial=1;
+                for (int i=1; i<=k-1; i++){
+                factorial = factorial*i;
+                }
+                Lq=((pow(tmll/tms,k)*tmll*tms)/(factorial*pow(k*tms-tmll,2)))*P0;
+            //-------------------------------------------------------------------------
+                Ls=Lq+(tmll/tms);
+            //-------------------------------------------------------------------------
+                Wq=Lq/tmll;
+            //-------------------------------------------------------------------------
+                Ws=Wq+(1/tms);
+            //-------------------------------------------------------------------------
+                factorial=1;
+                for (int i=1; i<=k; i++){
+                factorial = factorial*i;
+                }
+                Pw=(pow(tmll/tms,k)/factorial)*(k*tms/(k*tms-tmll))*P0;
+            //-------------------------------------------------------------------------
+
+                system("cls");
+                cout<<endl<<endl;
+
+                cout<<"\t RESULTADOS: "<<endl;
+                cout<<"\t **********"<<endl<<endl;
+                cout<<"\tProbabilidad de que no haya unidades en el sistema (P0): "<<P0<<endl;
+                cout<<"\tCantidad promedio de unidades en la linea de esperal (Lq): "<<Lq<<endl;
+                cout<<"\tCantidad promedio de unidades en el sistema (Ls): "<<Ls<<endl;
+                cout<<"\tTiempo promedio que pasa una unidad en la lï¿½nea de espera (Wq): "<<Wq<<endl;
+                cout<<"\tTiempo promedio que pasa una unidad en el sistema (Ws): "<<Ws<<endl;
+                cout<<"\tProbabilidad que una unidad que llega tenga que esperar por el servicio (Pw): "<<Pw<<endl<<endl;
+
+                cout<<"\tPara calcular la Probabilidad de n unidades en el sistema (Pn) "<<endl;
+
+                do{
+                    cout<<"\tIngrese la cantidad de unidades (n): "; cin>>n;
+
+                    if (n<=k){
+                    factorial=1;
+                    for (int i=1; i<=n; i++){
+                        factorial = factorial*i;
+                    }
+                    Pn = (pow(tmll/tms,n)/factorial)*P0;
+                    }
+                    else{
+                    factorial=1;
+                    for (int i=1; i<=k; i++){
+                        factorial = factorial*i;
+                        }
+                    Pn=(pow(tmll/tms,n)/(factorial*pow(k,n-k)))*P0;
+                    }
+
+                    cout<<"\tLa probabilidad de "<<n<<" unidades en el sistema es de: "<<Pn<<endl<<endl;
+
+                    cout<<"\n\n\tDesea volver a calcular la probabilidad para otra cantidad de unidades (n)? SI (1) o NO (2): "; cin>>op;
+                }while(op==1);
+
+                cout<<endl;
+                system("pause");
+                system("cls");
+                cout<<"\n\n\tDesea volver a realizar otro calculo? SI (1) o NO (2): "; cin>>r;
+                cout<<endl;
+
+            }while(r==1);
+            }
+            break;
+
+            case 3:{
+                system("cls");
+                float tasa_llegadas = 0, tasa_servicios = 0, canales_ocupados[canaless],promedio_sistema, sumatoria, factorial;
+                int cantidad_canales = 0;
+                cout<<"\nIngrese tasa de llegadas (lambda): ";
+                cin>>tasa_llegadas;
+                cout<<"\nIngrese tasa de de servicios (u): ";
+                cin>>tasa_servicios;
+                cout<<"\nIngrese numero de canales: ";
+                cin>>cantidad_canales;
+                ocupados(tasa_llegadas, tasa_servicios, cantidad_canales, canales_ocupados);
+                cout<< endl;
+                promedio_sistema=(tasa_llegadas/tasa_servicios)*(1-canales_ocupados[cantidad_canales]);
+                cout<<"\n---------------------------------------------\n";
+                cout<<"Numero promedio de unidades en el sistema";
+                cout<<"\n---------------------------------------------\n";
+                cout<<"\t\t"<<promedio_sistema;
+                cout<<endl;
+                cout <<endl<< endl;
+                system("pause");}
+            break;
+            
+            case 4:
+            {
+                system("cls");
+                double lambda,u,desv,Po,Lq,L,Wq,W,Pw,val;
+                cout<<"Ingrese la tasa de llegadas :";
+                cin>>lambda;
+                cout<<"Ingrese la tasa de servicios :";
+                cin>>u;
+                cout<<"Ingrese la desviacion estandar (tiempo de servicio) :";
+                cin>>desv;
+
+                P0(val,Po,lambda,u);
+                lq(Lq,lambda,u,desv);
+                l(L,Lq,lambda,u,desv);
+                wq(Wq, Lq, lambda, u, desv);
+                w( W, Wq, Lq, lambda, u, desv);
+                pw(Pw, lambda, u);
+                system("pause");
+            }
+            break;
+
+            case 5:
+            {   
+                system("cls");
+                analisiseconomico();
+                system("pause");
+            }
+            break;
+
+            case 6:
+            {
+                system("cls");
+                nodo *p=NULL;
+                nodo *o=NULL;
+                int i,n,m,opc,num;
+                float j,k,f1,f2;
+                float A[10][2];
+                system("cls");
+                cout<<"***************************************************"<<endl;
+                cout<<"******PROBLEMA DE COMPLEMENTARIEDAD NO LINEAL******"<<endl;
+                cout<<"***************************************************"<<endl;
+                cout<<"Ingrese nro de monomios/terminos de la 1era funcion: "<<endl;
+                cin>>n;
+                
+                for(i=0;i<n;i++){
+                    cout<<"Termino ["<<i+1<<"]: "<<endl;
+                    p=ins_f(p);
+                }
+                cout<<endl;
+                cout<<"Ingrese nro de monomios/terminos de la 2da funcion: "<<endl;
+                cin>>m;
+                
+                for(i=0;i<m;i++){
+                    cout<<"Termino ["<<i+1<<"]: "<<endl;
+                    o=ins_f(o);
+                }
+
+                system("pause");
+                system("cls");
+                cout<<"***************************************************"<<endl;
+                cout<<"******PROBLEMA DE COMPLEMENTARIEDAD NO LINEAL******"<<endl;
+                cout<<"***************************************************"<<endl;
+                cout<<"Primera funcion: "<<endl;
+                recorre(p);
+                cout<<endl;
+                cout<<"Segunda funcion: "<<endl;
+                recorre(o);
+                cout<<endl;
+                cout<<"Modo de calculo: "<<endl;
+                cout<<"1. Calculo puntos  en especifico . . . "<<endl;
+                cout<<"2. Calculo todos los puntos posibles . . . "<<endl;
+                cin>>opc;
+                switch(opc){
+                    case 1:
+                        cout<<"Ingrese numero de puntos: "<<endl;
+                        cin>>num;
+                        cout<<endl<<"Digite los puntos: "<<endl;
+                        for(i=0;i<num;i++){
+                            cout<<"Punto ["<<i+1<<"]: "<<endl;
+                            cout<<"x = ";
+                            cin>>A[i][1];
+                            cout<<"y = ";
+                            cin>>A[i][2];
+                        }
+                        cout<<endl;
+                        cout<<"Comprobando puntos . . . "<<endl<<endl;
+                        for(i=0;i<num;i++){
+                            cout<<"Punto ["<<i+1<<"]: "<<endl;
+                            cout<<"x = "<<A[i][1];
+                            cout<<endl;
+                            cout<<"y = "<<A[i][2];
+                            f1=calculo(p,A[i][1],A[i][2]);
+                            f2=calculo(o,A[i][1],A[i][2]);
+                            if(f1>=0 && f2>=0){
+                                if(A[i][1]*f1==0 && A[i][2]*f2==0){
+                                    cout<<endl;
+                                    cout<<"matriz x: "<<A[i][1]<<" - "<<A[i][2]<<endl;
+                                    cout<<"matriz fx: "<<f1<<" - "<<f2<<endl;
+                                    cout<<"Cumple con las dos condiciones de factibilidad y complementariedad";
+                                }
+                            }
+                            cout<<endl<<endl;
+                        }
+                        
+                        system("pause");
+                    break;
+                    case 2:
+                            for(j=0;j<=2.1;j=j+0.1){
+                                for(k=0;k<=2.1;k=k+0.1){
+                                    f1=calculo(p,j,k);
+                                    f2=calculo(o,j,k);
+                                    if(f1>=0 && f2>=0){
+                                        if(j*f1==0 && k*f2==0){
+                                            cout<<"matriz x: "<<j<<" - "<<k<<endl;
+                                            cout<<"matriz fx: "<<f1<<" - "<<f2<<endl;
+                                            cout<<"Cumple con las dos condiciones de factibilidad y complementariedad"<<endl<<endl;
+                                        }
+                                    }
+                                }
+                            }
+                        system("pause");
+                    break;
+                }while(opc!=2);
+                
+            }
+            break;
+
+            case 7:
+            {
+                system("cls");
+                cout<<"\nHASTA LUEGO <3\n";
+            }
+            break;
+         
+        }
+    }while(opcion!=7);
+
+
+    return 0;
+}
